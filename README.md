@@ -15,7 +15,7 @@ A fast, animated portfolio built with plain HTML, CSS and JavaScript, with a **T
 - **Experience timeline and project cards** with 3D tilt on hover.
 - **"Hire me" side drawer:** pick Email, WhatsApp, Call, LinkedIn or GitHub.
 - **WhatsApp message form** that opens a pre-filled chat.
-- **AI chat assistant:** a Claude-powered answer (via a Vercel serverless function). If the API is not configured, it falls back to a built-in knowledge base, so the chat never breaks.
+- **AI chat assistant:** answers from Gemini (free tier) or Claude (via a Vercel serverless function). If the API is not configured, it falls back to a built-in knowledge base, so the chat never breaks.
 - Typing roles, scroll reveal, glow cursor, magnetic buttons, mobile layout, and `prefers-reduced-motion` support.
 
 ## Tech stack
@@ -25,7 +25,7 @@ A fast, animated portfolio built with plain HTML, CSS and JavaScript, with a **T
 | Frontend | HTML5, CSS3, vanilla JavaScript (no build step) |
 | 3D / animation | [Three.js](https://threejs.org) r128 (loaded from cdnjs), CSS animations, IntersectionObserver |
 | Fonts | Inter, JetBrains Mono (Google Fonts) |
-| AI chat | Anthropic Claude API (`claude-haiku-5-5`) through a Vercel serverless function |
+| AI chat | Google Gemini API (free tier) or Anthropic Claude API, through a Vercel serverless function |
 | Hosting | Vercel (static site + `api/` function) |
 
 ## Project structure
@@ -36,9 +36,11 @@ A fast, animated portfolio built with plain HTML, CSS and JavaScript, with a **T
 ├── style.css       # theme, layout, components
 ├── main.js         # 3D scene, animations, skills inventory, drawer, WhatsApp form
 ├── package.json    # npm scripts (dev, dev:api)
+├── .env.example    # all configurable settings (copy to .env)
 ├── chatbot.js      # chat UI, calls /api/chat, offline knowledge-base fallback
 └── api/
-    └── chat.js     # Vercel serverless function that calls the Claude API
+    ├── chat.js     # Vercel serverless function (Gemini / Claude)
+    └── _facts.js   # facts the AI is allowed to use
 ```
 
 ## Run it on your machine
@@ -64,7 +66,7 @@ The chat assistant works locally using the **built-in knowledge base** (no setup
 ### Run the AI chat locally (optional)
 
 ```bash
-export ANTHROPIC_API_KEY=your_key_here    # get one at console.anthropic.com
+cp .env.example .env     # then open .env and paste your key (free: aistudio.google.com/apikey)
 npm run dev:api
 ```
 
@@ -75,10 +77,10 @@ The first run asks you to log in to Vercel. Then open the URL it prints (usually
 1. Push this repo to GitHub.
 2. Go to [vercel.com/new](https://vercel.com/new) and import the repository.
 3. Set **Framework Preset** to **Other**. Leave build command and output directory empty.
-4. Under **Environment Variables**, add `ANTHROPIC_API_KEY` with your Anthropic API key. Without it the chat falls back to the built-in answers.
+4. Under **Environment Variables**, add `GEMINI_API_KEY` (free, from [aistudio.google.com/apikey](https://aistudio.google.com/apikey)) or `ANTHROPIC_API_KEY`. If both are set, Gemini is used first. Without any key the chat falls back to the built-in answers.
 5. Click **Deploy**.
 
-Never put the API key in any frontend file. It must only live in the Vercel environment variable.
+Never put an API key in any frontend file. It must only live in the Vercel environment variables.
 
 ## Make it your own
 
@@ -88,10 +90,11 @@ Never put the API key in any frontend file. It must only live in the Vercel envi
 | Skills and proficiency (`'high'`, `'op'`, `'dev'`) | `SKILLS` array in `main.js` |
 | Colors and theme | CSS variables at the top of `style.css` |
 | Chat answers when the API is off | `KB` array in `chatbot.js` |
-| Facts the AI is allowed to use | `FACTS` in `api/chat.js` |
+| Facts the AI is allowed to use | `api/_facts.js` |
+| AI provider, models, answer length | `.env` (see `.env.example`) |
 | WhatsApp number | search for `918887984720` in `index.html` and `main.js` |
 
-Keep `FACTS` in `api/chat.js` and `KB` in `chatbot.js` consistent with your resume, because the assistant only answers from them.
+Keep `api/_facts.js` and `KB` in `chatbot.js` consistent with your resume, because the assistant only answers from them.
 
 ## Browser support
 

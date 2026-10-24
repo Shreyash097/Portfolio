@@ -1,39 +1,31 @@
-// Vercel serverless function: answers visitor questions about Shreyash using Claude.
-// Needs the ANTHROPIC_API_KEY environment variable (set it in Vercel > Settings > Environment Variables).
+// Vercel serverless function: answers visitor questions about Shreyash using Gemini (free) or Claude.
+// Set ONE of these in Vercel > Settings > Environment Variables:
+//   GEMINI_API_KEY    (free tier at aistudio.google.com; optional GEMINI_MODEL, default gemini-2.5-flash)
+//   ANTHROPIC_API_KEY (paid; Claude)
+// If both are set, Gemini is tried first. If the call fails, the browser falls back to the built-in answers.
 
-const FACTS = `
-PROFILE
-- Name: Shreyash Pandey. Full Stack Developer from Lucknow, India.
-- Education: B.Tech in Computer Science and Engineering, Babu Banarasi Das Northern India Institute of Technology, Lucknow (July 2025).
-- Contact: email pandeyshreyash790@gmail.com, LinkedIn http://www.linkedin.com/in/shreyash-pandey-a6b749253, GitHub https://github.com/Shreyash097. Open to new opportunities.
+const fs = require('fs');
+const path = require('path');
 
-CURRENT WORK
-- Software Development Engineer I (SDE-1) at Trackier, Performance Team, since March 2026.
-- Builds major client-facing features across multiple production projects, end to end.
-- Led the MongoDB migration from v3 to v7 for production services.
-- Contributed to the PHP to Node.js migration of backend services.
-- Built a Periskope-Vitally connector that replaced a paid third-party integration tool at zero cost.
-- Created the Docker setup for the company web app: one-command setup on any machine.
-- Earlier: SDE Intern at Trackier, Aug 2025 to Feb 2026. Built Tools-Hub, a RAG chatbot, semantic search with Pinecone, and Dockerized the web app.
+// Local dev: read ../.env if it exists (on Vercel, use Environment Variables instead).
+try {
+  fs.readFileSync(path.join(__dirname, '..', '.env'), 'utf8').split(/\r?\n/).forEach(line => {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+    if (m && m[2] && !(m[1] in process.env)) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  });
+} catch (e) { /* no .env file, that's fine */ }
 
-SKILLS
-- Programming: JavaScript (high), Java, SQL, TypeScript (learning).
-- Frontend: React.js (high), HTML/CSS (high), Tailwind CSS.
-- Backend: Node.js, Express.js, REST APIs, API integrations (all high).
-- Cloud and DevOps: Docker, Git, GitHub (high), Vercel.
-- Data: MongoDB (high), MySQL, Pinecone, RAG.
-- Tools: Postman, Jira, Notion, Confluence, VS Code.
-- Currently learning: system design, agentic AI, automation concepts, machine learning fundamentals.
+const cfg = () => ({
+  provider: (process.env.AI_PROVIDER || 'auto').toLowerCase(),        // auto | gemini | claude
+  geminiKey: process.env.GEMINI_API_KEY,
+  claudeKey: process.env.ANTHROPIC_API_KEY,
+  geminiModel: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+  claudeModel: process.env.CLAUDE_MODEL || 'claude-haiku-5-5',
+  maxTokens: parseInt(process.env.AI_MAX_TOKENS, 10) || 500,
+  temperature: Number.isFinite(parseFloat(process.env.AI_TEMPERATURE)) ? parseFloat(process.env.AI_TEMPERATURE) : 0.4,
+});
 
-PROJECTS
-- Tools-Hub (MERN, Pinecone, RAG): centralized engineering wiki with tech stack, GitHub, Notion and Jira details, plus an AI chatbot that answers questions about repositories, documents and task history with source references. https://github.com/Shreyash097/ToolHubs
-- After Stars (MERN): food donation and redistribution platform connecting donors, NGOs and delivery partners. Role-based dashboards, real-time pickup tracking, optimized queries that cut response time by about 30%. https://github.com/Shreyash097/AfterStars
-- eCommerce website (React): admin dashboard, real-time analytics, order management workflows. https://github.com/Shreyash097/E-commerce-website
-- Trello Clone (React.js), Solar System Explorer (HTML/CSS/JS), Gemini Clone (JavaScript). All repos: https://github.com/Shreyash097
-
-FUTURE PLANS
-- Shreyash is deepening his skills in system design and agentic AI and is open to new opportunities. He has not published more detailed career goals.
-`;
+const FACTS = require('./_facts');
 
 const SYSTEM = `You are the assistant on Shreyash Pandey's portfolio website. Visitors are recruiters, engineers and clients.
 Answer ONLY from the FACTS below.
@@ -46,10 +38,40 @@ Answer ONLY from the FACTS below.
 FACTS:
 ${FACTS}`;
 
+async function askGemini(c, messages) {
+  const key = c.geminiKey, model = c.geminiModel;
+  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: SYSTEM }] },
+      contents: messages.map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),
+      generationConfig: { maxOutputTokens: c.maxTokens, temperature: c.temperature },
+    }),
+  });
+  if (!r.ok) return null;
+  const d = await r.json();
+  const parts = (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts) || [];
+  return parts.map(p => p.text || '').join('').trim() || null;
+}
+
+async function askClaude(c, messages) {
+  const key = c.claudeKey;
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: c.claudeModel, max_tokens: c.maxTokens, temperature: c.temperature, system: SYSTEM, messages }),
+  });
+  if (!r.ok) return null;
+  const d = await r.json();
+  return (d.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim() || null;
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) return res.status(503).json({ error: 'not configured' });
+  const c = cfg();
+  const useG = c.geminiKey && c.provider !== 'claude', useC = c.claudeKey && c.provider !== 'gemini';
+  if (!useG && !useC) return res.status(503).json({ error: 'not configured' });
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
@@ -61,15 +83,10 @@ module.exports = async (req, res) => {
   if (!messages.length || messages[messages.length - 1].role !== 'user') return res.status(400).json({ error: 'bad request' });
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-haiku-5-5', max_tokens: 400, system: SYSTEM, messages }),
-    });
-    if (!r.ok) return res.status(502).json({ error: 'upstream ' + r.status });
-    const data = await r.json();
-    const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
-    if (!text) return res.status(502).json({ error: 'empty' });
+    let text = null;
+    if (useG) text = await askGemini(c, messages).catch(() => null);
+    if (!text && useC) text = await askClaude(c, messages).catch(() => null);
+    if (!text) return res.status(502).json({ error: 'no answer' });
     res.setHeader('Cache-Control', 'no-store');
     return res.status(200).json({ text });
   } catch (e) {
