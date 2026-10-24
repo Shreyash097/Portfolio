@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shreyash Pandey — Full Stack Developer</title>
+<meta name="description" content="Shreyash Pandey, Full Stack Developer (MERN, Node.js, AI/RAG, Docker) at Trackier. Portfolio, projects and experience.">
+<meta property="og:title" content="Shreyash Pandey — Full Stack Developer">
+<meta property="og:description" content="MERN, Node.js, RAG chatbots, Docker. Building fast, useful software.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b0d1a'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='%237c5cff' font-family='sans-serif' font-weight='700'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loader"><div class="ring"></div><span>loading universe…</span></div>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="glow" id="glow" aria-hidden="true"></div>
+<div id="progress"></div>
+
+<header class="nav">
+  <a href="#home" class="logo">SP<span>.</span></a>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#ai">AI Work</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact" class="btn-sm" id="hireBtn">Hire me</a>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="hero">
+    <div class="hero-text">
+      <p class="mono tag">&lt; Hello World &gt;</p>
+      <h1>I'm <span class="grad">Shreyash Pandey</span></h1>
+      <h2 class="typed"><span id="typed"></span><i class="caret"></i></h2>
+      <p class="lead">Software Development Engineer at <b>Trackier</b>. I build production-grade web apps, migrate legacy systems to modern stacks and ship AI tools people actually use.</p>
+      <div class="cta">
+        <a href="#projects" class="btn primary magnetic">View my work</a>
+        <a href="#contact" class="btn ghost magnetic">Get in touch</a>
+      </div>
+      <ul class="stats">
+        <li><b data-count="1">0</b><span>year in industry</span></li>
+        <li><b data-count="8">0</b><span>public repos</span></li>
+        <li><b data-count="7">0</b><span>MongoDB major version jump</span></li>
+      </ul>
+    </div>
+    <div class="scroll-hint mono">scroll ↓</div>
+  </section>
+
+  <section id="about" class="section">
+    <h3 class="title reveal"><span class="mono">01.</span> About me</h3>
+    <div class="about-grid">
+      <div class="reveal">
+        <p>I'm a full stack developer from Lucknow, India, with a B.Tech in Computer Science. I joined Trackier as an intern in August 2025 and moved into an SDE-1 role in the Performance Team in 2026.</p>
+        <p>My work sits where backend reliability meets developer experience: database migrations, Node.js services, Docker environments that start with one command, and internal AI tooling backed by RAG and vector search.</p>
+        <p>I like problems that remove daily friction for other people, whether that's a paid integration replaced by a zero-cost connector or a wiki that answers questions with sources.</p>
+      </div>
+      <div class="card3d reveal tilt" data-tilt>
+        <div class="terminal">
+          <div class="dots"><i></i><i></i><i></i></div>
+<pre class="mono"><span class="c">// shreyash.config.js</span>
+<span class="k">const</span> shreyash = {
+  role: <span class="s">"SDE-1 @ Trackier"</span>,
+  stack: [<span class="s">"MERN"</span>, <span class="s">"Docker"</span>, <span class="s">"Pinecone"</span>],
+  focus: <span class="s">"backend + AI tooling"</span>,
+  location: <span class="s">"Lucknow, India"</span>,
+  openToWork: <span class="k">true</span>,
+};</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section">
+    <h3 class="title reveal"><span class="mono">02.</span> Experience</h3>
+    <div class="timeline">
+      <article class="job reveal tilt" data-tilt>
+        <div class="when mono">Mar 2026 — Present</div>
+        <h4>Software Development Engineer I <small>· Trackier, Performance Team</small></h4>
+        <ul>
+          <li>Shipped major client-facing features across multiple production projects, end to end.</li>
+          <li>Led the <b>MongoDB migration from v3 to v7</b> for production services.</li>
+          <li>Contributed to the <b>PHP → Node.js migration</b> of backend modules.</li>
+          <li>Built a <b>Periskope–Vitally connector</b> that replaced a paid integration tool at <b>zero cost</b>.</li>
+          <li>Created the <b>Docker setup</b> for the web app: one-command setup on any machine.</li>
+        </ul>
+      </article>
+      <article class="job reveal tilt" data-tilt>
+        <div class="when mono">Aug 2025 — Feb 2026</div>
+        <h4>Software Development Engineer Intern <small>· Trackier</small></h4>
+        <ul>
+          <li>Built <b>Tools-Hub</b>, a centralized engineering wiki for tech stacks, GitHub, Notion and Jira details.</li>
+          <li>Designed a <b>RAG chatbot</b> over company data that answers with source references.</li>
+          <li>Implemented <b>semantic search</b> with Pinecone embeddings across Notion, Confluence, GitHub and Jira.</li>
+          <li><b>Dockerized</b> the company web application for one-click local setup.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="skills" class="section">
+    <h3 class="title reveal"><span class="mono">03.</span> Skills <span class="grad">Inventory</span></h3>
+    <div id="skillFilters" class="filters reveal" role="tablist" aria-label="Filter skills by category"></div>
+    <div id="skillGrid" class="skill-grid"></div>
+  </section>
+
+  <section id="ai" class="section">
+    <h3 class="title reveal"><span class="mono">04.</span> AI Work</h3>
+    <p class="lead reveal" style="margin-bottom:34px">Things I have built with AI on real company data.</p>
+    <div class="ai-grid">
+      <div class="ai-card reveal tilt" data-tilt><span class="ico">⛓</span><h4>RAG pipelines</h4><p>Retrieval-Augmented Generation over repositories, documents and task history, with answers that cite their sources.</p></div>
+      <div class="ai-card reveal tilt" data-tilt><span class="ico">🧭</span><h4>Semantic search</h4><p>Vector embeddings stored in Pinecone, searching across Notion, Confluence, GitHub READMEs and Jira.</p></div>
+      <div class="ai-card reveal tilt" data-tilt><span class="ico">🤖</span><h4>AI chatbots</h4><p>Conversational assistants grounded in private knowledge. Tools-Hub answers engineering questions in seconds.</p></div>
+      <div class="ai-card reveal tilt" data-tilt><span class="ico">🔌</span><h4>Automation connectors</h4><p>Periskope–Vitally sync that replaced a paid tool at zero cost, plus one-command Docker environments.</p></div>
+    </div>
+    <p class="center reveal" style="margin-top:28px"><button class="btn primary magnetic" data-open-chat>Ask my AI assistant →</button></p>
+  </section>
+
+  <section id="projects" class="section">
+    <h3 class="title reveal"><span class="mono">05.</span> Projects</h3>
+    <div class="projects">
+      <a class="project reveal tilt" data-tilt href="https://github.com/Shreyash097/ToolHubs" target="_blank" rel="noopener">
+        <span class="mono badge">MERN · RAG · Pinecone</span>
+        <h4>Tools-Hub</h4>
+        <p>Centralized engineering wiki with an AI chatbot that answers questions about repositories, documents and task history, with sources.</p>
+        <span class="more mono">View on GitHub ↗</span>
+      </a>
+      <a class="project reveal tilt" data-tilt href="https://github.com/Shreyash097/AfterStars" target="_blank" rel="noopener">
+        <span class="mono badge">MERN · Real-time</span>
+        <h4>After Stars</h4>
+        <p>Food donation platform connecting donors, NGOs and delivery partners. Role-based dashboards, live listings and pickup tracking; queries tuned for ~30% faster responses.</p>
+        <span class="more mono">View on GitHub ↗</span>
+      </a>
+      <a class="project reveal tilt" data-tilt href="https://github.com/Shreyash097/E-commerce-website" target="_blank" rel="noopener">
+        <span class="mono badge">React · Admin</span>
+        <h4>eCommerce Website</h4>
+        <p>Full-featured store with admin dashboard, real-time analytics and order management workflows.</p>
+        <span class="more mono">View on GitHub ↗</span>
+      </a>
+      <a class="project reveal tilt" data-tilt href="https://github.com/Shreyash097/Trello-Clone" target="_blank" rel="noopener">
+        <span class="mono badge">React.js</span>
+        <h4>Trello Clone</h4>
+        <p>A Trello-inspired task management app built with React.js.</p>
+        <span class="more mono">View on GitHub ↗</span>
+      </a>
+      <a class="project reveal tilt" data-tilt href="https://github.com/Shreyash097/SolarSystemfun-" target="_blank" rel="noopener">
+        <span class="mono badge">HTML · CSS · JS</span>
+        <h4>Solar System Explorer</h4>
+        <p>Interactive solar system model with planets orbiting the Sun in real time and fun facts on click.</p>
+        <span class="more mono">View on GitHub ↗</span>
+      </a>
+      <a class="project reveal tilt" data-tilt href="https://github.com/Shreyash097/geminiclone" target="_blank" rel="noopener">
+        <span class="mono badge">JavaScript</span>
+        <h4>Gemini Clone</h4>
+        <p>A lightweight, privacy-focused take on the Gemini protocol for simple, fast, text-based browsing.</p>
+        <span class="more mono">View on GitHub ↗</span>
+      </a>
+    </div>
+    <p class="center reveal"><a class="btn ghost magnetic" href="https://github.com/Shreyash097" target="_blank" rel="noopener">All repositories on GitHub ↗</a></p>
+  </section>
+
+  <section id="contact" class="section contact">
+    <h3 class="title reveal"><span class="mono">06.</span> Let's build something</h3>
+    <p class="lead center reveal">I'm open to new opportunities and interesting problems. My inbox is always open.</p>
+    <form id="waForm" class="wa-form reveal">
+      <input id="waName" placeholder="Your name" maxlength="60" autocomplete="name" required>
+      <textarea id="waMsg" placeholder="Write your message…" rows="3" maxlength="500" required></textarea>
+      <button class="btn wa magnetic" type="submit">💬 Send on WhatsApp</button>
+    </form>
+    <div class="links reveal">
+      <a class="btn primary magnetic" href="mailto:pandeyshreyash790@gmail.com">pandeyshreyash790@gmail.com</a>
+      <a class="btn ghost magnetic" href="https://wa.me/918887984720?text=Hi%20Shreyash%2C%20I%20saw%20your%20portfolio." target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn ghost magnetic" href="http://www.linkedin.com/in/shreyash-pandey-a6b749253" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost magnetic" href="https://github.com/Shreyash097" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+</main>
+
+
+<div id="drawerBg" class="drawer-bg" hidden></div>
+<aside id="drawer" class="drawer" role="dialog" aria-label="Connect with Shreyash" aria-hidden="true">
+  <button id="drawerClose" class="drawer-x" aria-label="Close">✕</button>
+  <h3>How would you like to connect?</h3>
+  <p class="muted">Pick whatever is easiest, I usually reply quickly.</p>
+  <a class="opt" href="mailto:pandeyshreyash790@gmail.com?subject=Hello%20Shreyash"><span class="oi">✉️</span><span><b>Email</b><small>pandeyshreyash790@gmail.com</small></span><i>→</i></a>
+  <a class="opt" href="https://wa.me/918887984720?text=Hi%20Shreyash%2C%20I%20saw%20your%20portfolio." target="_blank" rel="noopener"><span class="oi">💬</span><span><b>WhatsApp</b><small>+91 88879 84720</small></span><i>→</i></a>
+  <a class="opt" href="tel:+918887984720"><span class="oi">📞</span><span><b>Call</b><small>+91 88879 84720</small></span><i>→</i></a>
+  <a class="opt" href="http://www.linkedin.com/in/shreyash-pandey-a6b749253" target="_blank" rel="noopener"><span class="oi">💼</span><span><b>LinkedIn</b><small>Connect professionally</small></span><i>→</i></a>
+  <a class="opt" href="https://github.com/Shreyash097" target="_blank" rel="noopener"><span class="oi">🐙</span><span><b>GitHub</b><small>Shreyash097</small></span><i>→</i></a>
+</aside>
+
+<button id="chatFab" class="ask-bar" aria-label="Open AI assistant"><span>Too lazy to scroll? Ask about Shreyash</span><i aria-hidden="true">→</i></button>
+<section id="chat" class="chat" role="dialog" aria-label="Ask Shreyash's AI" hidden>
+  <header class="chat-head">
+    <div><b>Ask Shreyash's AI</b><small>Answers based on this portfolio</small></div>
+    <button id="chatClose" class="chat-x" aria-label="Close chat">✕</button>
+  </header>
+  <div id="chatLog" class="chat-log" aria-live="polite"></div>
+  <div class="try"><span>Try asking</span>
+    <div id="chatChips" class="chips"></div>
+  </div>
+  <form id="chatForm" class="chat-form">
+    <input id="chatInput" placeholder="Ask a question…" autocomplete="off" maxlength="200">
+    <button aria-label="Send" type="submit">↑</button>
+  </form>
+</section>
+
+<footer class="mono">Designed &amp; built by Shreyash Pandey · <span id="year"></span></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="main.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>
