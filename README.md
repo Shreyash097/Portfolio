@@ -1,0 +1,106 @@
+# Shreyash Pandey — 3D Developer Portfolio
+
+A fast, animated portfolio built with plain HTML, CSS and JavaScript, with a **Three.js 3D background** and an **AI chat assistant** that answers questions about me in English, Hindi or Hinglish.
+
+**Repo:** https://github.com/Shreyash097/Portfolio
+
+<!-- Add a screenshot or GIF here once deployed:
+![Portfolio preview](./preview.png)
+-->
+
+## What's inside
+
+- **3D hero and background** (Three.js): a glowing wireframe core, torus knot and orbit rings that follow the mouse. While you scroll, the camera flies through a starfield with floating shapes.
+- **Skills inventory:** filterable cards (Programming, Frontend, Backend, Cloud & DevOps, Data, Tools, Learning) with proficiency levels.
+- **Experience timeline and project cards** with 3D tilt on hover.
+- **"Hire me" side drawer:** pick Email, WhatsApp, Call, LinkedIn or GitHub.
+- **WhatsApp message form** that opens a pre-filled chat.
+- **AI chat assistant:** a Claude-powered answer (via a Vercel serverless function). If the API is not configured, it falls back to a built-in knowledge base, so the chat never breaks.
+- Typing roles, scroll reveal, glow cursor, magnetic buttons, mobile layout, and `prefers-reduced-motion` support.
+
+## Tech stack
+
+| Area | Tools |
+| --- | --- |
+| Frontend | HTML5, CSS3, vanilla JavaScript (no build step) |
+| 3D / animation | [Three.js](https://threejs.org) r128 (loaded from cdnjs), CSS animations, IntersectionObserver |
+| Fonts | Inter, JetBrains Mono (Google Fonts) |
+| AI chat | Anthropic Claude API (`claude-haiku-5-5`) through a Vercel serverless function |
+| Hosting | Vercel (static site + `api/` function) |
+
+## Project structure
+
+```
+.
+├── index.html      # page markup and sections
+├── style.css       # theme, layout, components
+├── main.js         # 3D scene, animations, skills inventory, drawer, WhatsApp form
+├── chatbot.js      # chat UI, calls /api/chat, offline knowledge-base fallback
+└── api/
+    └── chat.js     # Vercel serverless function that calls the Claude API
+```
+
+## Run it on your machine
+
+You only need a browser and either Python or Node.js.
+
+```bash
+# 1. Clone
+git clone https://github.com/Shreyash097/Portfolio.git
+cd Portfolio
+
+# 2. Start a local server (pick one)
+python3 -m http.server 8000
+# or
+npx serve .
+
+# 3. Open the site
+# http://localhost:8000
+```
+
+Opening `index.html` by double-click also works for most of the page, but a local server is recommended. An internet connection is needed for the Three.js CDN and Google Fonts.
+
+The chat assistant works locally using the **built-in knowledge base** (no setup). The Claude-powered answers need the serverless function, see below.
+
+### Run the AI chat locally (optional)
+
+```bash
+npm i -g vercel
+export ANTHROPIC_API_KEY=your_key_here    # get one at console.anthropic.com
+vercel dev
+```
+
+Then open the URL that `vercel dev` prints (usually http://localhost:3000).
+
+## Deploy to Vercel
+
+1. Push this repo to GitHub.
+2. Go to [vercel.com/new](https://vercel.com/new) and import the repository.
+3. Set **Framework Preset** to **Other**. Leave build command and output directory empty.
+4. Under **Environment Variables**, add `ANTHROPIC_API_KEY` with your Anthropic API key. Without it the chat falls back to the built-in answers.
+5. Click **Deploy**.
+
+Never put the API key in any frontend file. It must only live in the Vercel environment variable.
+
+## Make it your own
+
+| What to change | Where |
+| --- | --- |
+| Name, text, experience, projects, contact links | `index.html` |
+| Skills and proficiency (`'high'`, `'op'`, `'dev'`) | `SKILLS` array in `main.js` |
+| Colors and theme | CSS variables at the top of `style.css` |
+| Chat answers when the API is off | `KB` array in `chatbot.js` |
+| Facts the AI is allowed to use | `FACTS` in `api/chat.js` |
+| WhatsApp number | search for `918887984720` in `index.html` and `main.js` |
+
+Keep `FACTS` in `api/chat.js` and `KB` in `chatbot.js` consistent with your resume, because the assistant only answers from them.
+
+## Browser support
+
+Latest Chrome, Edge, Safari and Firefox with WebGL enabled. If WebGL is unavailable, the site still works without the 3D background.
+
+## Contact
+
+- Email: pandeyshreyash790@gmail.com
+- LinkedIn: https://www.linkedin.com/in/shreyash-pandey-a6b749253
+- GitHub: https://github.com/Shreyash097
