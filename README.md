@@ -35,6 +35,7 @@ A fast, animated portfolio built with plain HTML, CSS and JavaScript, with a **T
 ├── index.html      # page markup and sections
 ├── style.css       # theme, layout, components
 ├── main.js         # 3D scene, animations, skills inventory, drawer, WhatsApp form
+├── package.json    # npm scripts (dev, dev:api)
 ├── chatbot.js      # chat UI, calls /api/chat, offline knowledge-base fallback
 └── api/
     └── chat.js     # Vercel serverless function that calls the Claude API
@@ -42,35 +43,32 @@ A fast, animated portfolio built with plain HTML, CSS and JavaScript, with a **T
 
 ## Run it on your machine
 
-You only need a browser and either Python or Node.js.
+You only need a browser and Node.js. There are no dependencies and no build step, so there is nothing to `npm install`.
 
 ```bash
 # 1. Clone
 git clone https://github.com/Shreyash097/Portfolio.git
 cd Portfolio
 
-# 2. Start a local server (pick one)
-python3 -m http.server 8000
-# or
-npx serve .
+# 2. Start the dev server (no install needed)
+npm run dev
 
 # 3. Open the site
-# http://localhost:8000
+# http://localhost:3000
 ```
 
-Opening `index.html` by double-click also works for most of the page, but a local server is recommended. An internet connection is needed for the Three.js CDN and Google Fonts.
+No Node.js? `python3 -m http.server 8000` works too. Opening `index.html` by double-click also works for most of the page, but a local server is recommended. An internet connection is needed for the Three.js CDN and Google Fonts.
 
 The chat assistant works locally using the **built-in knowledge base** (no setup). The Claude-powered answers need the serverless function, see below.
 
 ### Run the AI chat locally (optional)
 
 ```bash
-npm i -g vercel
 export ANTHROPIC_API_KEY=your_key_here    # get one at console.anthropic.com
-vercel dev
+npm run dev:api
 ```
 
-Then open the URL that `vercel dev` prints (usually http://localhost:3000).
+The first run asks you to log in to Vercel. Then open the URL it prints (usually http://localhost:3000).
 
 ## Deploy to Vercel
 
