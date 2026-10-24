@@ -35,7 +35,8 @@ A fast, animated portfolio built with plain HTML, CSS and JavaScript, with a **T
 ├── index.html      # page markup and sections
 ├── style.css       # theme, layout, components
 ├── main.js         # 3D scene, animations, skills inventory, drawer, WhatsApp form
-├── package.json    # npm scripts (dev, dev:api)
+├── package.json    # npm scripts (dev, dev:static)
+├── scripts/dev-server.js  # local server: site + /api/chat on one port
 ├── .env.example    # all configurable settings (copy to .env)
 ├── chatbot.js      # chat UI, calls /api/chat, offline knowledge-base fallback
 └── api/
@@ -52,7 +53,7 @@ You only need a browser and Node.js. There are no dependencies and no build step
 git clone https://github.com/Shreyash097/Portfolio.git
 cd Portfolio
 
-# 2. Start the dev server (no install needed)
+# 2. Start the dev server: site + AI chat on one port (no install needed)
 npm run dev
 
 # 3. Open the site
@@ -67,10 +68,10 @@ The chat assistant works locally using the **built-in knowledge base** (no setup
 
 ```bash
 cp .env.example .env     # then open .env and paste your key (free: aistudio.google.com/apikey)
-npm run dev:api
+npm run dev
 ```
 
-The first run asks you to log in to Vercel. Then open the URL it prints (usually http://localhost:3000).
+Then open http://localhost:3000. No Vercel login is needed for local development.
 
 ## Deploy to Vercel
 

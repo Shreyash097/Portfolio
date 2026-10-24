@@ -2,7 +2,7 @@
    from the knowledge base below and answers from them. No API key, no backend. */
 (() => {
   const KB = [
-    { id: 'Future', tags: 'future plan plans goal goals next aim aage vision learning want career',
+    { id: 'Future', tags: 'future plan plans goal goals next aim aage vision learning learn sikh seekh sikhna seekhna sikhta currently abhi want career',
       text: "Shreyash is deepening his skills in **system design** and **agentic AI**, and is also learning automation concepts and machine learning fundamentals. He is open to new opportunities where he can build and ship real products." },
     { id: 'Projects', tags: 'walk through project projects built made work portfolio showcase best',
       text: "Shreyash's standout projects are **Tools-Hub**, an engineering wiki with a RAG chatbot; **After Stars**, a food donation platform with real-time pickup tracking; and a full-featured **eCommerce website** with an admin dashboard. Ask me about any of them for details, or browse https://github.com/Shreyash097" },
@@ -64,7 +64,7 @@
     if (THANKS.test(q)) return { text: "Anytime! If you'd like to talk to Shreyash directly, his email is pandeyshreyash790@gmail.com." };
     const hits = retrieve(q);
     if (!hits.length || hits[0].s < 1.2)
-      return { text: "I only know what's on Shreyash's resume and GitHub, and I couldn't find that. Try asking about his experience, projects, skills, education or contact details." };
+      return { text: "I couldn't find that in Shreyash's resume or GitHub. Try asking about his current work, projects, tech stack, education or how to contact him." };
     const top = hits.slice(0, 1);
     return { text: top.map(h => h.d.text).join('\n\n'), sources: top.map(h => h.d.id) };
   }
@@ -75,8 +75,35 @@
   let busy = false, greeted = false;
 
   const linkify = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/(https?:\/\/[^\s)<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  // Render assistant text: **bold**, links, "- " bullet lists, paragraphs.
+  const render = s => {
+    const inline = t => linkify(t);
+    return s.split(/\n{2,}/).map(block => {
+      const lines = block.split('\n'); let out = '', list = [];
+      const flush = () => { if (list.length) { out += '<ul>' + list.map(l => '<li>' + inline(l) + '</li>').join('') + '</ul>'; list = []; } };
+      lines.forEach(l => { const m = l.match(/^\s*[-•*]\s+(.*)/); if (m) list.push(m[1]); else { flush(); if (l.trim()) out += '<p>' + inline(l) + '</p>'; } });
+      flush(); return out;
+    }).join('');
+  };
   const add = (cls, html) => { const m = document.createElement('div'); m.className = cls; m.innerHTML = html; log.appendChild(m); log.scrollTop = log.scrollHeight; return m; };
 
+  const DEFAULT_FU = ['What is he working on right now?', 'Walk me through a project', 'How can I contact him?'];
+  const FU = {
+    'Current role': ['What did he build at Trackier?', "What's his tech stack?", 'What is he learning next?'],
+    'Internship': ['Tell me about Tools-Hub', 'What is he working on right now?', 'What are his skills?'],
+    'Tools-Hub': ['How does the RAG chatbot work?', 'What other projects has he built?', 'How can I contact him?'],
+    'After Stars': ['Tell me about Tools-Hub', 'What other projects has he built?', "What's his tech stack?"],
+    'eCommerce': ['Tell me about After Stars', 'What other projects has he built?', 'How can I contact him?'],
+    'Projects': ['Tell me about Tools-Hub', 'Tell me about After Stars', 'How can I contact him?'],
+    'Skills': ['What is he learning next?', 'Walk me through a project', 'How can I contact him?'],
+    'Future': ['What is he working on right now?', 'Walk me through a project', 'How can I contact him?'],
+    'Contact': ['What is he working on right now?', "What's his tech stack?", 'Walk me through a project'],
+  };
+  const setChips = (label, list) => {
+    $('chatTry').firstElementChild.textContent = label;
+    const wrap = $('chatChips'); wrap.innerHTML = '';
+    list.forEach(item => { const [ic, q] = Array.isArray(item) ? item : ['↳', item]; const b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<em>' + ic + '</em>'; b.append(q); b.onclick = () => ask(q); wrap.appendChild(b); });
+  };
   const history = [];
   async function remote() {
     try {
@@ -85,7 +112,7 @@
       clearTimeout(t);
       if (!r.ok) return null;
       const d = await r.json();
-      return d.text || null;
+      return d.text ? { text: d.text, followups: d.followups || [] } : null;
     } catch (e) { return null; }
   }
 
@@ -96,20 +123,22 @@
     history.push({ role: 'user', content: q });
     const tr = add('trace', '● ● ●  thinking…');
     // 1) real AI (Vercel function), 2) fallback to the built-in knowledge base
-    let text = await remote();
-    if (!text) { await new Promise(res => setTimeout(res, 400)); text = answer(q).text; }
+    let res = await remote(), text, fu;
+    if (res) { text = res.text; fu = res.followups; }
+    else { await new Promise(r => setTimeout(r, 400)); const a = answer(q); text = a.text; fu = FU[(a.sources || [])[0]] || DEFAULT_FU; }
+    if (!fu || !fu.length) fu = DEFAULT_FU;
     tr.remove();
     history.push({ role: 'assistant', content: text });
     const m = add('msg bot', '');
-    if (reduce) m.innerHTML = linkify(text);
-    else for (let i = 1; i <= text.length; i += 3) { m.innerHTML = linkify(text.slice(0, i)); log.scrollTop = log.scrollHeight; await new Promise(res => setTimeout(res, 8)); }
-    m.innerHTML = linkify(text);
+    if (reduce) m.innerHTML = render(text);
+    else for (let i = 1; i <= text.length; i += 3) { m.innerHTML = render(text.slice(0, i)); log.scrollTop = log.scrollHeight; await new Promise(res => setTimeout(res, 8)); }
+    m.innerHTML = render(text);
+    setChips('Keep going', fu);
     log.scrollTop = log.scrollHeight;
     busy = false;
   }
 
-  const chips = [['🚀', 'What is he working on right now?'], ['</>', "What's his tech stack?"], ['📁', 'Walk me through a project'], ['✉', 'How can I contact him?']];
-  chips.forEach(([ic, c]) => { const b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<em>' + ic + '</em>'; b.append(c); b.onclick = () => ask(c); $('chatChips').appendChild(b); });
+  setChips('Try asking', [['🚀', 'What is he working on right now?'], ['</>', "What's his tech stack?"], ['📁', 'Walk me through a project'], ['✉', 'How can I contact him?']]);
 
   function open() {
     box.hidden = false; fab.hidden = true; setTimeout(() => input.focus(), 50);
