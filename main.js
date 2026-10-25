@@ -100,6 +100,7 @@
     ['MongoDB', 'Data', 'high'], ['MySQL', 'Data', 'op'], ['Pinecone', 'Data', 'op'], ['RAG', 'Data', 'op'],
     ['Postman', 'Tools', 'op'], ['Jira', 'Tools', 'op'], ['Notion', 'Tools', 'op'], ['VS Code', 'Tools', 'high'],
     ['System Design', 'Learning', 'dev'], ['Agentic AI', 'Learning', 'dev'], ['Automation Concepts', 'Learning', 'dev'], ['Machine Learning Fundamentals', 'Learning', 'dev'],
+    ['Cursor', 'AI Coding Tools', 'high'], ['Antigravity', 'AI Coding Tools', 'high'], ['Claude Code', 'AI Coding Tools', 'high'],
   ];
   const cats = ['All', ...new Set(SKILLS.map(s => s[1]))];
   const fWrap = $('#skillFilters'), grid = $('#skillGrid');

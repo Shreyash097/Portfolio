@@ -7,7 +7,7 @@ PROFILE
 - Contact: email pandeyshreyash790@gmail.com, LinkedIn http://www.linkedin.com/in/shreyash-pandey-a6b749253, GitHub https://github.com/Shreyash097. Open to new opportunities.
 
 CURRENT WORK
-- Software Development Engineer I (SDE-1) at Trackier, Performance Team, since March 2026.
+- Software Development Engineer I (SDE-1) at Trackier, Performance Team, Mar 2026 – Nov 2026.
 - Builds major client-facing features across multiple production projects, end to end.
 - Led the MongoDB migration from v3 to v7 for production services.
 - Contributed to the PHP to Node.js migration of backend services.
@@ -21,6 +21,7 @@ SKILLS
 - Backend: Node.js, Express.js, REST APIs, API integrations (all high).
 - Cloud and DevOps: Docker, Git, GitHub (high), Vercel.
 - Data: MongoDB (high), MySQL, Pinecone, RAG.
+- AI coding tools he uses day to day: Cursor, Antigravity, Claude Code.
 - Tools: Postman, Jira, Notion, Confluence, VS Code.
 - Currently learning: system design, agentic AI, automation concepts, machine learning fundamentals.
 
